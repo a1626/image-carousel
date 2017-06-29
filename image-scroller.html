@@ -1,0 +1,62 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+
+<dom-module id="image-scroller">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        width: 100%;
+        overflow-x: hidden;
+      }
+
+      :host ::slotted(*) {
+        min-width: 100%;
+      }
+    </style>
+    <slot attribute="images"></slot>
+    <!-- <iron-icon icon="chevron-left"></iron-icon>
+    <iron-icon icon="chevron-right"></iron-icon> -->
+  </template>
+  <script>
+    /**
+     * `image-scroller`
+     *
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ImageScroller extends Polymer.Element {
+      static get is() { return 'image-scroller'; }
+      static get properties() {
+        return {
+          images: {
+            type: Array
+          },
+          autscroll: {
+            type: Boolean,
+            value: false
+          },
+
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.calculateImages();
+        setInterval(function() {
+          this.scrollLeft += this.getBoundingClientRect().width;
+        }.bind(this), 1000);
+      }
+
+      calculateImages() {
+        this.querySelectorAll('')
+      }
+    }
+
+    window.customElements.define(ImageScroller.is, ImageScroller);
+  </script>
+</dom-module>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>image-scroller demo</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../bower_components/iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../bower_components/polymer/lib/elements/dom-repeat.html">
+    <link rel="import" href="../../bower_components/polymer/lib/elements/dom-bind.html">
+    <link rel="import" href="../image-scroller.html">
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic image-scroller demo</h3>
+      <demo-snippet>
+        <dom-bind>
+          <template>
+            <image-scroller>
+              <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
+                <img class="content" src="[[item]]">
+              </template>
+            </image-scroller>
+          </template>
+        </dom-bind>
+      </demo-snippet>
+    </div>
+  </body>
+</html>
