@@ -1,24 +1,51 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="image-scroller">
   <template>
-    <style>
+    <style >
       :host {
-        display: flex;
+        @apply --layout;
+        @apply --layout-center;
         width: 100%;
-        overflow-x: hidden;
       }
 
       :host ::slotted(*) {
         min-width: 100%;
       }
+
+      #image-container {
+        @apply --layout;
+        overflow-x: hidden;
+      }
+
+      .navigation-icons {
+        @apply --layout;
+        @apply --layout-center;
+        height: calc(var(--iron-icon-height, 24px) + 10px);
+      }
+
     </style>
-    <slot attribute="images"></slot>
-    <!-- <iron-icon icon="chevron-left"></iron-icon>
-    <iron-icon icon="chevron-right"></iron-icon> -->
+    <dom-if>
+      <template if="[[_showLeftIcon]]">
+        <div class="navigation-icons">
+          <iron-icon icon="chevron-left"></iron-icon>
+        </div>
+      </template>
+    </dom-if>
+    <div id="image-container">
+      <slot attribute="images"></slot>
+    </div>
+    <dom-if>
+      <template if="[[_showRightIcon]]">
+        <div class="navigation-icons">
+          <iron-icon icon="chevron-right"></iron-icon>
+        </div>
+      </template>
+    </dom-if>
   </template>
   <script>
     /**
@@ -36,25 +63,49 @@
           images: {
             type: Array
           },
-          autscroll: {
+          autoscroll: {
             type: Boolean,
             value: false
           },
-
+          _numberOfImages: {
+            type: Number
+          }
         };
       }
 
       connectedCallback() {
         super.connectedCallback();
-        this.calculateImages();
+        this._calculateMaxScroll();
+      }
+
+      _calculateMaxScroll() {
+        this._numberOfImages = this.querySelectorAll('.scolling-images').length;
+        this._isAutoscrollEnabled() ? this._autoScroll() : null;
+      }
+
+      _autoScroll() {
+        const container = this.$['image-container'];
+        let rect;
         setInterval(function() {
-          this.scrollLeft += this.getBoundingClientRect().width;
+          rect = container.getBoundingClientRect();
+          container.scrollLeft < (this._numberOfImages-1) * rect.width ? container.scrollLeft += rect.width : container.scrollLeft = 0;
         }.bind(this), 1000);
       }
 
-      calculateImages() {
-        this.querySelectorAll('')
+      _showLeftIcon() {
+        // add logic for image calculation
+        return this._isAutoscrollEnabled();
       }
+
+      _showRightIcon() {
+        // add logic for image calculation
+        return this._isAutoscrollEnabled();
+      }
+
+      _isAutoscrollEnabled() {
+        return this.autoscroll;
+      }
+
     }
 
     window.customElements.define(ImageScroller.is, ImageScroller);
