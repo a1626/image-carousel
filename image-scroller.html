@@ -1,8 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
 
 <dom-module id="image-scroller">
   <template>
@@ -10,6 +11,7 @@
       :host {
         @apply --layout;
         @apply --layout-center;
+        position: relative;
         width: 100%;
       }
 
@@ -19,33 +21,71 @@
 
       #image-container {
         @apply --layout;
+        min-width: 100%;
         overflow-x: hidden;
       }
 
       .navigation-icons {
         @apply --layout;
         @apply --layout-center;
-        height: calc(var(--iron-icon-height, 24px) + 10px);
+        position: absolute;
+        height: calc(var(--iron-icon-height, 24px) + 15px);
+        background: var(--image-scroller-navigation-icon-color, rgba(255, 255, 255, 1));
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+
+      .navigation-icons:hover {
+        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                    0 2px 4px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .navigation-icons[hidden] {
+        visibility: hidden;
+      }
+
+      .left-icon {
+        left: calc(var(--iron-icon-width, 24px)/-2);
+      }
+
+      .right-icon {
+        right: calc(var(--iron-icon-width, 24px)/-2);
+      }
+
+      .dots-container {
+        @apply --layout;
+        position: absolute;
+        bottom: 11px;
+        left: 50%;
+      }
+
+      .dots {
+        height: 7px;
+        width: 7px;
+        margin: 2px;
+        border-radius: 50%;
+        border: 1px solid black;
       }
 
     </style>
-    <dom-if>
-      <template if="[[_showLeftIcon]]">
-        <div class="navigation-icons">
-          <iron-icon icon="chevron-left"></iron-icon>
-        </div>
-      </template>
-    </dom-if>
+    <div class="navigation-icons left-icon" on-tap="_showPreviousImage" hidden$="[[_hideLeftIcon]]">
+      <iron-icon icon="chevron-left"></iron-icon>
+    </div>
     <div id="image-container">
       <slot attribute="images"></slot>
     </div>
-    <dom-if>
-      <template if="[[_showRightIcon]]">
-        <div class="navigation-icons">
-          <iron-icon icon="chevron-right"></iron-icon>
-        </div>
+    <div class="navigation-icons right-icon" on-tap="_showNextImage" hidden$="[[_hideRightIcon]]">
+      <iron-icon icon="chevron-right"></iron-icon>
+    </div>
+    <div class="dots-container">
+      <template is="dom-repeat" items="[1,2,3]">
+        <div class="dots"></div>
       </template>
-    </dom-if>
+     </div>
   </template>
   <script>
     /**
@@ -56,7 +96,7 @@
      * @polymer
      * @demo demo/index.html
      */
-    class ImageScroller extends Polymer.Element {
+    class ImageScroller extends Polymer.GestureEventListeners(Polymer.Element) {
       static get is() { return 'image-scroller'; }
       static get properties() {
         return {
@@ -65,7 +105,17 @@
           },
           autoscroll: {
             type: Boolean,
-            value: false
+            value: false,
+            reflectToAttribute: true,
+            observer: '_autoScrollComputation'
+          },
+          _hideLeftIcon: {
+            type: Boolean,
+            computed: '_calcLeftArrowsVal(autoscroll)'
+          },
+          _hideRightIcon: {
+            type: Boolean,
+            computed: '_calcRightArrowsVal(autoscroll)'
           },
           _numberOfImages: {
             type: Number
@@ -73,37 +123,54 @@
         };
       }
 
-      connectedCallback() {
-        super.connectedCallback();
-        this._calculateMaxScroll();
+      get container() {
+        return this.$['image-container'];
       }
 
-      _calculateMaxScroll() {
+      connectedCallback() {
+        super.connectedCallback();
+        this._computeNumberOfImages();
+      }
+
+      _computeNumberOfImages() {
         this._numberOfImages = this.querySelectorAll('.scolling-images').length;
-        this._isAutoscrollEnabled() ? this._autoScroll() : null;
+      }
+
+      _autoScrollComputation() {
+        this.autoscroll ? this._autoScroll() : clearInterval(this._intervalTrigger);
       }
 
       _autoScroll() {
-        const container = this.$['image-container'];
         let rect;
-        setInterval(function() {
-          rect = container.getBoundingClientRect();
-          container.scrollLeft < (this._numberOfImages-1) * rect.width ? container.scrollLeft += rect.width : container.scrollLeft = 0;
+        this._intervalTrigger = setInterval(function() {
+          rect = this._getRect();
+          this.container.scrollLeft < (this._numberOfImages-1) * rect.width ? this.container.scrollLeft += rect.width : this.container.scrollLeft = 0;
         }.bind(this), 1000);
+
       }
 
-      _showLeftIcon() {
-        // add logic for image calculation
-        return this._isAutoscrollEnabled();
+      _getRect() {
+        return this.container.getBoundingClientRect();
       }
 
-      _showRightIcon() {
-        // add logic for image calculation
-        return this._isAutoscrollEnabled();
+      _calcRightArrowsVal(autoscroll) {
+        return autoscroll || (this._getRect().width ? this.container.scrollLeft >= (this._numberOfImages-1) * this._getRect().width : false);
       }
 
-      _isAutoscrollEnabled() {
-        return this.autoscroll;
+      _calcLeftArrowsVal(autoscroll) {
+        return autoscroll || this.container.scrollLeft === 0;
+      }
+
+      _showPreviousImage() {
+        this.container.scrollLeft -= this._getRect().width;
+        this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll));
+        this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll));
+      }
+
+      _showNextImage() {
+        this.container.scrollLeft += this._getRect().width;
+        this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll));
+        this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll));
       }
 
     }
