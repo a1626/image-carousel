@@ -1,6 +1,6 @@
 {
-  "name": "image-scroller",
-  "main": "image-scroller.html",
+  "name": "image-carousel",
+  "main": "image-carousel.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "iron-icon": "^2.0.0",
