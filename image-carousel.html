@@ -5,7 +5,7 @@
 <link rel="import" href="../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
 
-<dom-module id="image-scroller">
+<dom-module id="image-carousel">
   <template>
     <style >
       :host {
@@ -66,6 +66,10 @@
         @apply --right-navigation-icon-mixin;
       }
 
+      .dots-container[hidden] {
+        display: none;
+      }
+
       .dots-container {
         @apply --layout;
         position: absolute;
@@ -94,7 +98,7 @@
     <div class="navigation-icons right-icon" on-tap="_showNextImage" hidden$="[[_hideRightIcon]]">
       <iron-icon icon="chevron-right"></iron-icon>
     </div>
-    <div class="dots-container">
+    <div class="dots-container" hidden$="[[hideDots]]">
       <template is="dom-repeat" items="[[_imageArray]]" on-dom-change="_changeDotSelection">
         <div class="dots" id$="dot[[index]]" on-tap="_dotClicked"></div>
       </template>
@@ -110,33 +114,69 @@
      * @demo demo/index.html
      */
     class ImageScroller extends Polymer.GestureEventListeners(Polymer.Element) {
-      static get is() { return 'image-scroller'; }
+      static get is() { return 'image-carousel'; }
       static get properties() {
         return {
-          images: {
-            type: Array
-          },
+          /**
+           * Boolean value to decide if images should change automatically.
+           * Navigation buttons will always be hidden if this is true.
+           */
           autoscroll: {
             type: Boolean,
             value: false,
             reflectToAttribute: true,
             observer: '_autoScrollComputation'
           },
+
+          /**
+           * Boolean to hide the dots used for depicting current selected image and number of images.
+           */
+          hideDots: {
+            type: Boolean,
+            value: false
+          },
+
+          /**
+           * Gives index of image on display (count starts from 0).
+           */
           currentSelectedItem: {
             type: Number,
             value: 0
           },
+
+          /**
+           * Boolean to hide navigation icons
+           */
+          hideIcons: {
+            type: Boolean,
+            value: false
+          },
+
+          /**
+           * Boolean to hide left navigation icon
+           */
           _hideLeftIcon: {
             type: Boolean,
-            computed: '_calcLeftArrowsVal(autoscroll)'
+            computed: '_calcLeftArrowsVal(autoscroll, hideIcons)'
           },
+
+          /**
+           * Boolean to hide right navigation icon
+           */
           _hideRightIcon: {
             type: Boolean,
-            computed: '_calcRightArrowsVal(autoscroll)'
+            computed: '_calcRightArrowsVal(autoscroll, hideIcons)'
           },
+
+          /**
+           * Gives total number of images/items in the carousel
+           */
           _numberOfImages: {
             type: Number
           },
+
+          /**
+           * */
           _imageArray: {
             type: Array,
             computed: '_imagesCountChanged(_numberOfImages)'
@@ -196,30 +236,30 @@
         return this.container.getBoundingClientRect();
       }
 
-      _calcRightArrowsVal(autoscroll) {
-        return autoscroll || (this._getRect().width ? this.container.scrollLeft >= (this._numberOfImages-1) * this._getRect().width : false);
+      _calcRightArrowsVal(autoscrol, hideIconsl) {
+        return autoscroll || hideIcons || (this._getRect().width ? this.container.scrollLeft >= (this._numberOfImages-1) * this._getRect().width : false);
       }
 
-      _calcLeftArrowsVal(autoscroll) {
-        return autoscroll || this.container.scrollLeft === 0;
+      _calcLeftArrowsVal(autoscroll, hideIcons) {
+        return autoscroll || hideIcons || this.container.scrollLeft === 0;
       }
 
       _showPreviousImage() {
         this.container.scrollLeft -= this._getRect().width;
         this._dotClicked({model:{index:this.currentSelectedItem-1}});
-        this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll));
-        this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll));
+        this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll, this.hideIcons));
+        this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll, this.hideIcons));
       }
 
       _showNextImage() {
         this.container.scrollLeft += this._getRect().width;
         this._dotClicked({model:{index:this.currentSelectedItem+1}});
-        this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll));
-        this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll));
+        this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll, this.hideIcons));
+        this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll, this.hideIcons));
       }
 
     }
 
-    window.customElements.define(ImageScroller.is, ImageScroller);
+    window.customElements.define(ImageScroller.is, ImageCarousel);
   </script>
 </dom-module>
