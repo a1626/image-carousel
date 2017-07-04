@@ -14,5 +14,30 @@
   },
   "resolutions": {
     "polymer": "^2.0.0"
-  }
+  },
+  "homepage": "https://github.com/a1626/image-carousel",
+  "description": "Image carousel element for polymer",
+  "keywords": [
+    "polymer",
+    "polymer2.0",
+    "polymer2.x",
+    "polymer2",
+    "webcomponents",
+    "web-components",
+    "image",
+    "caousel",
+    "scroller",
+    "image-carousel"
+  ],
+  "authors": [
+    "a1626<gupta.abhishek1804@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
