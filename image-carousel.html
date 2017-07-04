@@ -5,6 +5,38 @@
 <link rel="import" href="../bower_components/polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
 
+<!--
+  `image-carousel` as the name suggests is a carousel element.
+
+  #### Example
+    <image-carousel>
+      <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
+        <img class="scolling-images" src="[[item]]" width="100px" height="350px">
+      </template>
+    </image-carousel>
+
+  #### Styling
+
+  Custom property | Description | Default
+  ----------------|-------------|---------
+  `--selected-dot-background` | Fill for selected dot | `rgba(119, 119, 119, 1)`
+  `--slotted-content-mixin` | Mixin applied to slot element | {}
+  `--image-container-mixin` | Mixin applied to image container | {}
+  `--image-carousel-navigation-icon-color` | Background color of navigation icons | `rgba(255, 255, 255, 1)`
+  `--navigation-icon-mixin` | Mixin applied to navigation icons | {}
+  `--navigation-icon-hover-mixin` | Mixin applied to navigation icon in focus | {}
+  `--left-navigation-icon-mixin` | Mixin applied to left navigation icon | {}
+  `--right-navigation-icon-mixin` | Mixin applied to right navigation icon | {}
+  `--dots-container-mixin` | Mixin applied to dots container | {}
+  `--dots-border-color` | border color of dots | `rgba(119, 119, 119, 1)`
+  `--dots-mimxin` | Mixin applied to dots | {}
+
+
+
+      @customElement
+      @polymer
+      @demo demo/index.html
+ -->
 <dom-module id="image-carousel">
   <template>
     <style >
@@ -36,7 +68,7 @@
         @apply --layout-center;
         position: absolute;
         height: calc(var(--iron-icon-height, 24px) + 15px);
-        background: var(--image-scroller-navigation-icon-color, rgba(255, 255, 255, 1));
+        background: var(--image-carousel-navigation-icon-color, rgba(255, 255, 255, 1));
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
                     0 1px 5px 0 rgba(0, 0, 0, 0.12),
                     0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -105,15 +137,7 @@
      </div>
   </template>
   <script>
-    /**
-     * `image-scroller`
-     *
-     *
-     * @customElement
-     * @polymer
-     * @demo demo/index.html
-     */
-    class ImageScroller extends Polymer.GestureEventListeners(Polymer.Element) {
+    class ImageCarousel extends Polymer.GestureEventListeners(Polymer.Element) {
       static get is() { return 'image-carousel'; }
       static get properties() {
         return {
@@ -176,17 +200,25 @@
           },
 
           /**
-           * */
+           * Internal element to emulate array of images to create selector dots
+           */
           _imageArray: {
             type: Array,
             computed: '_imagesCountChanged(_numberOfImages)'
           },
+
+          /**
+           * Internal element to store the id of `setInterval` function
+           */
           _intervalTrigger: {
             type: Number
           }
         };
       }
 
+      /**
+       * Returns the container which contains the images.
+       */
       get container() {
         return this.$['image-container'];
       }
@@ -196,14 +228,24 @@
         this._computeNumberOfImages();
       }
 
+      /**
+       * Calculates number of images presented to the carousel.
+       */
       _computeNumberOfImages() {
         this._numberOfImages = this.querySelectorAll('.scolling-images').length;
       }
 
+      /**
+       * Dom change event for when dots are ready so as to select the correct dot
+       */
       _changeDotSelection() {
         this._dotClicked({model:{index: this.currentSelectedItem}});
       }
 
+      /**
+       * Changes the dot selection.
+       * @param {MouseEvent} event
+       */
       _dotClicked(e) {
         this.shadowRoot.querySelector("#dot"+this.currentSelectedItem).removeAttribute("selected-item");
         this.shadowRoot.querySelector("#dot"+e.model.index).setAttribute("selected-item", true);
@@ -211,14 +253,25 @@
         this.currentSelectedItem = e.model.index;
       }
 
+      /**
+       * Returns dummy array of same size as that of images.
+       * @param {Number} numberOfImages
+       * @return {Array}
+       */
       _imagesCountChanged(numberOfImages) {
         return new Array(numberOfImages);
       }
 
+      /**
+       * Observer on autoscroll to turn on and off the feature.
+       */
       _autoScrollComputation() {
         this.autoscroll ? this._autoScroll() : clearInterval(this._intervalTrigger);
       }
 
+      /**
+       * Turns autoscroll on
+       */
       _autoScroll() {
         let rect;
         this._intervalTrigger = setInterval(function() {
@@ -232,18 +285,33 @@
 
       }
 
+      /**
+       * Returns details regarding the container
+       * @return {Object}
+       */
       _getRect() {
         return this.container.getBoundingClientRect();
       }
 
-      _calcRightArrowsVal(autoscrol, hideIconsl) {
+      /**
+       * Calculates visibility of right navigation arrow.
+       * @return {Boolean}
+       */
+      _calcRightArrowsVal(autoscroll, hideIcons) {
         return autoscroll || hideIcons || (this._getRect().width ? this.container.scrollLeft >= (this._numberOfImages-1) * this._getRect().width : false);
       }
 
+      /**
+       * Calculates visibility of left navigation arrow
+       * @return {Boolean}
+       */
       _calcLeftArrowsVal(autoscroll, hideIcons) {
         return autoscroll || hideIcons || this.container.scrollLeft === 0;
       }
 
+      /**
+       * Changes selected image to previous image in the carousel
+       */
       _showPreviousImage() {
         this.container.scrollLeft -= this._getRect().width;
         this._dotClicked({model:{index:this.currentSelectedItem-1}});
@@ -251,6 +319,9 @@
         this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll, this.hideIcons));
       }
 
+      /**
+       * Changes selected image to next image in the carousel
+       */
       _showNextImage() {
         this.container.scrollLeft += this._getRect().width;
         this._dotClicked({model:{index:this.currentSelectedItem+1}});
@@ -260,6 +331,6 @@
 
     }
 
-    window.customElements.define(ImageScroller.is, ImageCarousel);
+    window.customElements.define(ImageCarousel.is, ImageCarousel);
   </script>
 </dom-module>
