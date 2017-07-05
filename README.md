@@ -8,6 +8,8 @@
 
 It's a carousel element for Polymer 2.0.
 
+#### Note: Sorry demos are not working. Kindly download the element and run it to check the demos.
+
 ## Installation
 
   bower i --save image-carousel
@@ -31,6 +33,7 @@ It's a carousel element for Polymer 2.0.
   <template is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]' slot="images">
     <img src="[[item]]" width="100px" height="350px">
   </div>
+</image-carousel>
 ```
 
 
