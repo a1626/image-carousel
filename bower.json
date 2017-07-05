@@ -1,6 +1,7 @@
 {
   "name": "image-carousel",
   "main": "image-carousel.html",
+  "version": "1.0.6",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "iron-icon": "^2.0.0",
