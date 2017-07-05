@@ -1,10 +1,17 @@
+
+[![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/a1626/image-carousel/blob/master/LICENSE)
+[![Bower version](https://badge.fury.io/bo/badges.svg)](http://badge.fury.io/bo/badges)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/a1626/image-carousel)
+
+
+
 # \<image-carousel\>
 
 It's a carousel element for Polymer 2.0.
 
 ## Installation
 
-  bower i image-carousel
+  bower i --save image-carousel
 
 
 ## Example
