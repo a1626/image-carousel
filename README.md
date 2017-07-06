@@ -8,8 +8,6 @@
 
 It's a carousel element for Polymer 2.0.
 
-#### Note: Sorry demos are not working. Kindly download the element and run it to check the demos.
-
 ## Installation
 
   bower i --save image-carousel
