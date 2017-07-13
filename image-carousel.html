@@ -260,7 +260,7 @@
        * @param {MouseEvent} event
        */
       _dotClicked(e) {
-        let elem = this.shadowRoot.querySelector("#dot"+this.currentSelectedItem)
+        let elem = this.shadowRoot.querySelector("#dot"+this.currentSelectedItem);
         if(elem) {
           elem.removeAttribute("selected-item");
           this.shadowRoot.querySelector("#dot"+e.model.index).setAttribute("selected-item", true);

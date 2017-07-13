@@ -15,37 +15,113 @@
 
     <test-fixture id="BasicTestFixture">
       <template>
-        <image-carousel></image-carousel>
-      </template>
+          <image-carousel></image-carousel>
+        </template>
     </test-fixture>
 
-    <test-fixture id="ChangedPropertyTestFixture">
+
+    <test-fixture id="AutoScrollTestFixture">
       <template>
-        <image-carousel prop1="new-prop1"></image-carousel>
-      </template>
+          <image-carousel autoscroll></image-carousel>
+        </template>
     </test-fixture>
+
+
+    <test-fixture id="AutoScrollWithNoDotsTestFixture">
+      <template>
+          <image-carousel autoscroll hide-dots></image-carousel>
+        </template>
+    </test-fixture>
+
+
+    <test-fixture id="NoDotsTestFixture">
+      <template>
+          <image-carousel hide-dots></image-carousel>
+        </template>
+    </test-fixture>
+
+
+    <test-fixture id="NoIconsTestFixture">
+      <template>
+          <image-carousel hide-icons></image-carousel>
+        </template>
+    </test-fixture>
+
 
     <script>
       suite('image-carousel', function() {
 
         test('instantiating the element with default properties works', function() {
           var element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'image-carousel');
-          var elementShadowRoot = element.shadowRoot;
-          var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello image-carousel!');
+          assert.equal(element.localName, 'image-carousel');
+          assert.equal(element.autoscroll, false);
+          assert.equal(element.hideDots, false);
+          assert.equal(element.hideIcons, false);
+          assert.equal(element._hideRightIcon, false);
+          assert.equal(element._hideLeftIcon, true);
         });
 
-        test('setting a property on the element works', function() {
-          // Create a test fixture
-          var element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
-          var elementShadowRoot = element.shadowRoot;
-          var elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+        test('Autoscroll', function() {
+          var element = fixture('AutoScrollTestFixture');
+          assert.equal(element.localName, 'image-carousel');
+          assert.equal(element.autoscroll, true);
+          assert.equal(element.hideDots, false);
+          assert.equal(element.hideIcons, true);
+          assert.equal(element._hideRightIcon, true);
+          assert.equal(element._hideLeftIcon, true);
+
         });
+
+        test('AutoScrollWithNoDots', function() {
+          var element = fixture('AutoScrollWithNoDotsTestFixture');
+          assert.equal(element.localName, 'image-carousel');
+          assert.equal(element.autoscroll, true);
+          assert.equal(element.hideDots, true);
+          assert.equal(element.hideIcons, true);
+          assert.equal(element._hideRightIcon, true);
+          assert.equal(element._hideLeftIcon, true);
+        });
+
+        test('NoDotsTestFixture', function() {
+          var element = fixture('NoDotsTestFixture');
+          assert.equal(element.localName, 'image-carousel');
+          assert.equal(element.autoscroll, false);
+          assert.equal(element.hideDots, true);
+          assert.equal(element.hideIcons, false);
+          assert.equal(element._hideRightIcon, false);
+          assert.equal(element._hideLeftIcon, true);
+        });
+
+        test('NoIconsTestFixture', function() {
+          var element = fixture('NoIconsTestFixture');
+          assert.equal(element.localName, 'image-carousel');
+          assert.equal(element.autoscroll, false);
+          assert.equal(element.hideDots, false);
+          assert.equal(element.hideIcons, true);
+          assert.equal(element._hideRightIcon, true);
+          assert.equal(element._hideLeftIcon, true);
+        });
+
+        // test('Selecting element via dot selection', function() {
+        //   var element = fixture('BasicTestFixture');
+        //   addDummyElements(element);
+        //   debugger;
+        //   element._setProperty('_numberOfImages', 5);
+        //   element._dotClicked({model:{index: 3}});
+
+        //   assert.equal(element.currentSelectedItem, 3);
+        //   assert.equal(element._hideRightIcon, false);
+        //   assert.equal(element._hideLeftIcon, false);
+        // });
+
 
       });
+
+      // function addDummyElements(element) {
+      //   // adding dummy elements to match the id of slotted elements
+      //     let imageContainer = element.shadowRoot.querySelector('#image-container');
+      //     imageContainer.innerHTML= '<div id="dot0" style="width:100vw"></div><div id="dot1" style="width:100vw"></div><div id="dot2" style="width:100vw"></div><div id="dot3" style="width:100vw"></div><div id="dot4" style="width:100vw"></div>';
+      // }
     </script>
 
   </body>
