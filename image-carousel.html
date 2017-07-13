@@ -184,7 +184,7 @@
            * Time after which image should change.
            * This will only work if autoscroll is set to true
            */
-          imageChangeTime: {
+          imageChangeInterval: {
             type: Number,
             value: 1000
           },
@@ -301,7 +301,7 @@
             this._dotClicked({model:{index:this.currentSelectedItem+1}})) :
           (this.container.scrollLeft = 0,
             this._dotClicked({model:{index:0}}));
-        }.bind(this), this.imageChangeTime);
+        }.bind(this), this.imageChangeInterval);
 
       }
 
