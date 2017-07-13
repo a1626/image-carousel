@@ -181,6 +181,15 @@
           },
 
           /**
+           * Time after which image should change.
+           * This will only work if autoscroll is set to true
+           */
+          imageChangeTime: {
+            type: Number,
+            value: 1000
+          },
+
+          /**
            * Boolean to hide left navigation icon
            */
           _hideLeftIcon: {
@@ -257,6 +266,8 @@
           this.shadowRoot.querySelector("#dot"+e.model.index).setAttribute("selected-item", true);
           this.container.scrollLeft = e.model.index * this._getRect().width;
           this.currentSelectedItem = e.model.index;
+          this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll, this.hideIcons));
+          this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll, this.hideIcons));
         }
       }
 
@@ -273,7 +284,9 @@
        * Observer on autoscroll to turn on and off the feature.
        */
       _autoScrollComputation() {
-        this.autoscroll ? this._autoScroll() : clearInterval(this._intervalTrigger);
+        this.autoscroll ?
+        (this._autoScroll(),
+         this._setProperty('hideIcons', true) ) : clearInterval(this._intervalTrigger);
       }
 
       /**
@@ -288,7 +301,7 @@
             this._dotClicked({model:{index:this.currentSelectedItem+1}})) :
           (this.container.scrollLeft = 0,
             this._dotClicked({model:{index:0}}));
-        }.bind(this), 1000);
+        }.bind(this), this.imageChangeTime);
 
       }
 
