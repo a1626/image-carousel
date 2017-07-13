@@ -1,6 +1,7 @@
 
 [![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/a1626/image-carousel/blob/master/LICENSE)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/a1626/image-carousel)
+[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)](https://travis-ci.org/a1626/image-carousel)
 
 
 
