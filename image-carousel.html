@@ -11,9 +11,11 @@
   #### Example
     <image-carousel>
       <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
-        <img class="scolling-images" src="[[item]]" width="100px" height="350px">
+        <img class="scrolling-images" src="[[item]]" width="100px" height="350px">
       </template>
     </image-carousel>
+
+  __NOTE__: Please add class `scrolling-images` to all the images that are going to be used inside the carousel.
 
   #### Styling
 
@@ -30,6 +32,7 @@
   `--dots-container-mixin` | Mixin applied to dots container | {}
   `--dots-border-color` | border color of dots | `rgba(119, 119, 119, 1)`
   `--dots-mimxin` | Mixin applied to dots | {}
+  `--dots-checked-mixin` | Mixin applied to checked dot | {}
 
 
 
@@ -47,8 +50,9 @@
         width: 100%;
       }
 
-      .dots[selected-item] {
+      .dots:checked {
         background-color: var(--selected-dot-background, rgba(119, 119, 119, 1));
+        @apply --dots-checked-mixin;
       }
 
       :host ::slotted(*) {
@@ -73,7 +77,9 @@
                     0 1px 5px 0 rgba(0, 0, 0, 0.12),
                     0 3px 1px -2px rgba(0, 0, 0, 0.2);
         transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
+        padding: 0px;
+        border-width: 0px;
+        cursor: pointer
         @apply --navigation-icon-mixin;
       }
 
@@ -117,22 +123,29 @@
         border-radius: 50%;
         cursor: pointer;
         border: 1px solid var(--dots-border-color, rgba(119, 119, 119, 1));
+        padding: 0px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        -o-appearance: none;
+        appearance: none;
+        background-color: transparent;
         @apply --dots-mimxin;
       }
 
     </style>
-    <div class="navigation-icons left-icon" on-tap="_showPreviousImage" hidden$="[[_hideLeftIcon]]">
+    <button class="navigation-icons left-icon" on-tap="_showPreviousImage" hidden$="[[_hideLeftIcon]]" aria-hidden$="[[_hideLeftIcon]" aria-label="scroll to previous image">
       <iron-icon icon="chevron-left"></iron-icon>
-    </div>
-    <div id="image-container">
+    </button>
+    <div id="image-container" role="feed">
       <slot attribute="images"></slot>
     </div>
-    <div class="navigation-icons right-icon" on-tap="_showNextImage" hidden$="[[_hideRightIcon]]">
+    <button class="navigation-icons right-icon" on-tap="_showNextImage" hidden$="[[_hideRightIcon]]" aria-hidden$="[[_hideRightIcon]]"  aria-label="scroll to next image">
       <iron-icon icon="chevron-right"></iron-icon>
-    </div>
-    <div class="dots-container" hidden$="[[hideDots]]">
+    </button>
+    <div class="dots-container" hidden$="[[hideDots]]" aria-hidden$="[[hideDots]]" tabindex="0" role="radiogroup">
       <template is="dom-repeat" items="[[_imageArray]]" on-dom-change="_changeDotSelection">
-        <div class="dots" id$="dot[[index]]" on-tap="_dotClicked"></div>
+        <input type="radio" name="image" class="dots" id$="dot[[index]]" on-tap="_dotClicked">
       </template>
      </div>
   </template>
@@ -217,8 +230,7 @@
            * Internal element to emulate array of images to create selector dots
            */
           _imageArray: {
-            type: Array,
-            computed: '_imagesCountChanged(_numberOfImages)'
+            type: Array
           },
 
           /**
@@ -239,14 +251,21 @@
 
       connectedCallback() {
         super.connectedCallback();
-        this._computeNumberOfImages();
+        this.computeNumberOfImages();
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          // adding role and tabindex to image carousel
+          this.setAttribute('role', 'region');
+          this.setAttribute('tabindex', '0');
+        });
       }
 
       /**
-       * Calculates number of images presented to the carousel.
+       * Calculates number of images presented to the carousel and populate _imageArray with those images.
+       * Please call this function if you are dynamically changing images.
        */
-      _computeNumberOfImages() {
-        this._numberOfImages = this.querySelectorAll('.scolling-images').length;
+      computeNumberOfImages() {
+        this._imageArray = Array.from(this.querySelectorAll('.scrolling-images'));
+        this._numberOfImages = this._imageArray.length;
       }
 
       /**
@@ -261,11 +280,21 @@
        * @param {MouseEvent} event
        */
       _dotClicked(e) {
-        let elem = this.shadowRoot.querySelector("#dot"+this.currentSelectedItem);
+        // handles keyboard press
+        (e.which && e.which === 32 || e.which === 13) || (e.charCode && e.charCode === 32 || e.charCode === 13) ? e.preventDefault() : null;
+        this.container.scrollLeft = e.model.index * this._getRect().width;
+        this._changeAttrAndProps(e);
+      }
+
+      /**
+       * Sets value of attributes and properties based on new selection.
+       * @param {MouseEvent} event
+       */
+      _changeAttrAndProps(e) {
+        let elem = this.shadowRoot.getElementById("dot"+this.currentSelectedItem);
         if(elem) {
-          elem.removeAttribute("selected-item");
-          this.shadowRoot.querySelector("#dot"+e.model.index).setAttribute("selected-item", true);
-          this.container.scrollLeft = e.model.index * this._getRect().width;
+          elem.removeAttribute("checked");
+          this.shadowRoot.getElementById("dot"+e.model.index).setAttribute("checked", true).setAttribute("aria-label", (this._imageArray[this.currentSelectedItem].getAttribute("alt") || `image ${this.currentSelectedItem+1}`));
           this._setCurrentSelectedItem(e.model.index);
           this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll, this.hideIcons));
           this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll, this.hideIcons));
@@ -273,21 +302,10 @@
       }
 
       /**
-       * Returns dummy array of same size as that of images.
-       * @param {Number} numberOfImages
-       * @return {Array}
-       */
-      _imagesCountChanged(numberOfImages) {
-        return new Array(numberOfImages);
-      }
-
-      /**
        * Observer on autoscroll to turn on and off the feature.
        */
       _autoScrollComputation() {
-        this.autoscroll ?
-        (this._autoScroll(),
-         this._setProperty('hideIcons', true) ) : clearInterval(this._intervalTrigger);
+        this.autoscroll ? (this._autoScroll(), this._setProperty('hideIcons', true) ) : clearInterval(this._intervalTrigger);
       }
 
       /**
@@ -299,9 +317,9 @@
           rect = this._getRect();
           this.container.scrollLeft < (this._numberOfImages-1) * rect.width ?
           (this.container.scrollLeft += rect.width,
-            this._dotClicked({model:{index:this.currentSelectedItem+1}})) :
+            this._changeAttrAndProps({model:{index:this.currentSelectedItem+1}})) :
           (this.container.scrollLeft = 0,
-            this._dotClicked({model:{index:0}}));
+            this._changeAttrAndProps({model:{index:0}}));
         }.bind(this), this.imageChangeInterval);
 
       }
@@ -316,6 +334,7 @@
 
       /**
        * Calculates visibility of right navigation arrow.
+       * @param {Boolean} autscroll, {Boolean} hideIcons
        * @return {Boolean}
        */
       _calcRightArrowsVal(autoscroll, hideIcons) {
@@ -324,6 +343,7 @@
 
       /**
        * Calculates visibility of left navigation arrow
+       * @param {Boolean} autscroll, {Boolean} hideIcons
        * @return {Boolean}
        */
       _calcLeftArrowsVal(autoscroll, hideIcons) {
@@ -335,9 +355,7 @@
        */
       _showPreviousImage() {
         this.container.scrollLeft -= this._getRect().width;
-        this._dotClicked({model:{index:this.currentSelectedItem-1}});
-        this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll, this.hideIcons));
-        this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll, this.hideIcons));
+        this._changeAttrAndProps({model:{index:this.currentSelectedItem-1}});
       }
 
       /**
@@ -345,9 +363,7 @@
        */
       _showNextImage() {
         this.container.scrollLeft += this._getRect().width;
-        this._dotClicked({model:{index:this.currentSelectedItem+1}});
-        this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll, this.hideIcons));
-        this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll, this.hideIcons));
+        this._changeAttrAndProps({model:{index:this.currentSelectedItem+1}});
       }
 
     }
