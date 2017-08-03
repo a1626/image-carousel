@@ -274,7 +274,7 @@
                 elem.addEventListener('mouseover', this._stopAutoscroll.bind(this)),
                 elem.addEventListener('mouseout', this._startAutoscroll.bind(this)),
                 idx++
-                );
+              );
             }
           }
         });
@@ -310,6 +310,9 @@
        */
        _changeDotSelection() {
         this._dotClicked({model:{index: this.currentSelectedItem}});
+
+        let event  = new CustomEvent("image-carousel-ready" ,{});
+        this.dispatchEvent(event);
       }
 
       /**
@@ -339,6 +342,9 @@
         }
       }
 
+      /**
+       * Makes selected image focusable and sets focus on it.
+       */
       _makeCurrentImageFocusable() {
         let idx = 0;
         for(let img of this._imageArray) {
@@ -386,7 +392,7 @@
        * @return {Boolean}
        */
        _calcRightArrowsVal(autoscroll, hideIcons) {
-        return autoscroll || hideIcons || (this._getRect().width ? this.container.scrollLeft >= (this._numberOfImages-1) * this._getRect().width : false);
+        return autoscroll || hideIcons || (this._getRect().width ? this.currentSelectedItem === this._numberOfImages-1 : false);
       }
 
       /**
@@ -395,7 +401,7 @@
        * @return {Boolean}
        */
        _calcLeftArrowsVal(autoscroll, hideIcons) {
-        return autoscroll || hideIcons || this.container.scrollLeft === 0;
+        return autoscroll || hideIcons || this.currentSelectedItem === 0;
       }
 
       /**

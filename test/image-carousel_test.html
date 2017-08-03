@@ -154,89 +154,94 @@
         assert.equal(element._hideLeftIcon, true);
       });
 
-      test('Selecting element via dot selection', function() {
+      test('Selecting element via dot selection', function(done) {
         const elementArray = fixture('BasicTestFixture');
         let element = elementArray[1];
         addLightDom(element);
-        element._setProperty('_numberOfImages', 5);
-        element._dotClicked({model:{index: 3}});
-        let selectedItem = element.shadowRoot.querySelector('#dot3');
+        element.computeNumberOfImages();
+        element.addEventListener('image-carousel-ready', () => {
+          element._dotClicked({model:{index: 3}});
+          let selectedItem = element.shadowRoot.querySelector('#dot3');
+          assert.equal(element.currentSelectedItem, 3);
+          assert.equal(element._hideRightIcon, false);
+          assert.equal(element._hideLeftIcon, false);
+          done()
+        });
+      }, true);
 
-        assert.isTrue(selectedItem.attributes.hasOwnProperty('selected-item'));
-        assert.equal(element.currentSelectedItem, 3);
-        assert.equal(element._hideRightIcon, false);
-        assert.equal(element._hideLeftIcon, false);
+      test('Selecting last element via dot selection', function(done) {
+        const elementArray = fixture('BasicTestFixture');
+        let element = elementArray[1];
+        addLightDom(element);
+        element.computeNumberOfImages();
+        element.addEventListener('image-carousel-ready', () => {
+          element._dotClicked({model:{index: 4}});
+          let selectedItem = element.shadowRoot.querySelector('#dot4');
+
+          assert.equal(element.currentSelectedItem, 4);
+          assert.equal(element._hideRightIcon, true);
+          assert.equal(element._hideLeftIcon, false);
+          done();
+        });
       });
 
-      test('Selecting last element via dot selection', function() {
+      test('Selecting element via navigation icons', function(done) {
         const elementArray = fixture('BasicTestFixture');
         let element = elementArray[1];
         addLightDom(element);
-        element._setProperty('_numberOfImages', 5);
-        element._dotClicked({model:{index: 4}});
-        let selectedItem = element.shadowRoot.querySelector('#dot4');
-
-        assert.isTrue(selectedItem.attributes.hasOwnProperty('selected-item'));
-        assert.equal(element.currentSelectedItem, 4);
-        assert.equal(element._hideRightIcon, true);
-        assert.equal(element._hideLeftIcon, false);
-      });
-
-      test('Selecting element via navigation icons', function() {
-        const elementArray = fixture('BasicTestFixture');
-        let element = elementArray[1];
-        addLightDom(element);
-        element._setProperty('_numberOfImages', 5);
-        element._showNextImage();
-        let selectedItem = element.shadowRoot.querySelector('#dot1');
-
-        assert.isTrue(selectedItem.attributes.hasOwnProperty('selected-item'));
-        assert.equal(element.currentSelectedItem, 1);
-        assert.equal(element._hideRightIcon, false);
-        assert.equal(element._hideLeftIcon, false);
-      });
-
-      test('Selecting multiple element via navigation icons', function() {
-        const elementArray = fixture('BasicTestFixture');
-        let element = elementArray[1];
-        addLightDom(element);
-        element._setProperty('_numberOfImages', 5);
-
-
-        // selecting last image
-        for (var i = element._numberOfImages - 2; i >= 0; i--) {
+        element.computeNumberOfImages();
+        element.addEventListener('image-carousel-ready', () => {
           element._showNextImage();
-        }
-        let selectedItem = element.shadowRoot.querySelector('#dot4');
-        assert.isTrue(selectedItem.attributes.hasOwnProperty('selected-item'));
-        assert.equal(element.currentSelectedItem, 4);
-        assert.equal(element._hideRightIcon, true);
-        assert.equal(element._hideLeftIcon, false);
+          let selectedItem = element.shadowRoot.querySelector('#dot1');
+
+          assert.equal(element.currentSelectedItem, 1);
+          assert.equal(element._hideRightIcon, false);
+          assert.equal(element._hideLeftIcon, false);
+          done();
+        });
+      });
+
+      test('Selecting multiple element via navigation icons', function(done) {
+        const elementArray = fixture('BasicTestFixture');
+        let element = elementArray[1];
+        addLightDom(element);
+        element.computeNumberOfImages();
+        element.addEventListener('image-carousel-ready', () => {
 
 
-        // selecting previous image
-        element._showPreviousImage();
-        selectedItem = element.shadowRoot.querySelector('#dot3');
-        assert.isTrue(selectedItem.attributes.hasOwnProperty('selected-item'));
-        assert.equal(element.currentSelectedItem, 3);
-        assert.equal(element._hideRightIcon, false);
-        assert.equal(element._hideLeftIcon, false);
+          // selecting last image
+          for (var i = element._numberOfImages - 2; i >= 0; i--) {
+            element._showNextImage();
+          }
+          let selectedItem = element.shadowRoot.querySelector('#dot4');
+          assert.equal(element.currentSelectedItem, 4);
+          assert.equal(element._hideRightIcon, true);
+          assert.equal(element._hideLeftIcon, false);
 
 
-        // selecting first image
-        for (var i = element._numberOfImages - 3; i >= 0; i--) {
+          // selecting previous image
           element._showPreviousImage();
-        }
-        selectedItem = element.shadowRoot.querySelector('#dot0');
-        assert.isTrue(selectedItem.attributes.hasOwnProperty('selected-item'));
-        assert.equal(element.currentSelectedItem, 0);
-        assert.equal(element._hideRightIcon, false);
-        assert.equal(element._hideLeftIcon, true);
+          selectedItem = element.shadowRoot.querySelector('#dot3');
+          assert.equal(element.currentSelectedItem, 3);
+          assert.equal(element._hideRightIcon, false);
+          assert.equal(element._hideLeftIcon, false);
+
+
+          // selecting first image
+          for (var i = element._numberOfImages - 3; i >= 0; i--) {
+            element._showPreviousImage();
+          }
+          selectedItem = element.shadowRoot.querySelector('#dot0');
+          assert.equal(element.currentSelectedItem, 0);
+          assert.equal(element._hideRightIcon, false);
+          assert.equal(element._hideLeftIcon, true);
+          done();
+        });
       });
     });
 
     function addLightDom(element) {
-      element.container.innerHTML = '<img src="https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg" id="dot0" style="min-width:100px"> <img src="https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg" id="dot1" style="min-width:100px"> <img src="https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg" id="dot2" style="min-width:100px"> <img src="https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg" id="dot3" style="min-width:100px"> <img src="https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg" id="dot4" style="min-width:100px">';
+      element.innerHTML = '<div slot="images"><img src="https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg" id="dot0" class="scrolling-images" style="min-width:100px"> <img src="https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg" id="dot1" class="scrolling-images" style="min-width:100px"> <img src="https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg" id="dot2" class="scrolling-images" style="min-width:100px"> <img src="https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg" id="dot3" class="scrolling-images" style="min-width:100px"> <img src="https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg" id="dot4" class="scrolling-images" style="min-width:100px"></div>';
     }
   </script>
 
