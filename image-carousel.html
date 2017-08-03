@@ -39,122 +39,122 @@
       @customElement
       @polymer
       @demo demo/index.html
- -->
-<dom-module id="image-carousel">
-  <template>
-    <style >
-      :host {
-        @apply --layout;
-        @apply --layout-center;
-        position: relative;
-        width: 100%;
-      }
+    -->
+    <dom-module id="image-carousel">
+      <template>
+        <style >
+          :host {
+            @apply --layout;
+            @apply --layout-center;
+            position: relative;
+            width: 100%;
+          }
 
-      .dots:checked {
-        background-color: var(--selected-dot-background, rgba(119, 119, 119, 1));
-        @apply --dots-checked-mixin;
-      }
+          .dots:checked {
+            background-color: var(--selected-dot-background, rgba(119, 119, 119, 1));
+            @apply --dots-checked-mixin;
+          }
 
-      :host ::slotted(*) {
-        min-width: 100%;
-        @apply --slotted-content-mixin;
-      }
+          :host ::slotted(*) {
+            min-width: 100%;
+            @apply --slotted-content-mixin;
+          }
 
-      #image-container {
-        @apply --layout;
-        min-width: 100%;
-        overflow-x: hidden;
-        @apply --image-container-mixin;
-      }
+          #image-container {
+            @apply --layout;
+            min-width: 100%;
+            overflow-x: hidden;
+            @apply --image-container-mixin;
+          }
 
-      .navigation-icons {
-        @apply --layout;
-        @apply --layout-center;
-        position: absolute;
-        height: calc(var(--iron-icon-height, 24px) + 15px);
-        background: var(--image-carousel-navigation-icon-color, rgba(255, 255, 255, 1));
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                    0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-        padding: 0px;
-        border-width: 0px;
-        cursor: pointer
-        @apply --navigation-icon-mixin;
-      }
+          .navigation-icons {
+            @apply --layout;
+            @apply --layout-center;
+            position: absolute;
+            height: calc(var(--iron-icon-height, 24px) + 15px);
+            background: var(--image-carousel-navigation-icon-color, rgba(255, 255, 255, 1));
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+            0 1px 5px 0 rgba(0, 0, 0, 0.12),
+            0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0px;
+            border-width: 0px;
+            cursor: pointer
+            @apply --navigation-icon-mixin;
+          }
 
-      .navigation-icons:hover {
-        box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 10px 0 rgba(0, 0, 0, 0.12),
-                    0 2px 4px -1px rgba(0, 0, 0, 0.4);
-        @apply --navigation-icon-hover-mixin;
-      }
+          .navigation-icons:hover {
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+            0 1px 10px 0 rgba(0, 0, 0, 0.12),
+            0 2px 4px -1px rgba(0, 0, 0, 0.4);
+            @apply --navigation-icon-hover-mixin;
+          }
 
-      .navigation-icons[hidden] {
-        visibility: hidden;
-      }
+          .navigation-icons[hidden] {
+            visibility: hidden;
+          }
 
-      .left-icon {
-        left: calc(var(--iron-icon-width, 24px)/-2);
-        @apply --left-navigation-icon-mixin;
-      }
+          .left-icon {
+            left: calc(var(--iron-icon-width, 24px)/-2);
+            @apply --left-navigation-icon-mixin;
+          }
 
-      .right-icon {
-        right: calc(var(--iron-icon-width, 24px)/-2);
-        @apply --right-navigation-icon-mixin;
-      }
+          .right-icon {
+            right: calc(var(--iron-icon-width, 24px)/-2);
+            @apply --right-navigation-icon-mixin;
+          }
 
-      .dots-container[hidden] {
-        display: none;
-      }
+          .dots-container[hidden] {
+            display: none;
+          }
 
-      .dots-container {
-        @apply --layout;
-        position: absolute;
-        bottom: 11px;
-        left: 50%;
-        @apply --dots-container-mixin;
-      }
+          .dots-container {
+            @apply --layout;
+            position: absolute;
+            bottom: 11px;
+            left: 50%;
+            @apply --dots-container-mixin;
+          }
 
-      .dots {
-        height: 7px;
-        width: 7px;
-        margin: 2px;
-        border-radius: 50%;
-        cursor: pointer;
-        border: 1px solid var(--dots-border-color, rgba(119, 119, 119, 1));
-        padding: 0px;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        -ms-appearance: none;
-        -o-appearance: none;
-        appearance: none;
-        background-color: transparent;
-        @apply --dots-mimxin;
-      }
+          .dots {
+            height: 7px;
+            width: 7px;
+            margin: 2px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid var(--dots-border-color, rgba(119, 119, 119, 1));
+            padding: 0px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            -o-appearance: none;
+            appearance: none;
+            background-color: transparent;
+            @apply --dots-mimxin;
+          }
 
-    </style>
-    <button class="navigation-icons left-icon" on-tap="_showPreviousImage" hidden$="[[_hideLeftIcon]]" aria-hidden$="[[_hideLeftIcon]" aria-label="scroll to previous image">
-      <iron-icon icon="chevron-left"></iron-icon>
-    </button>
-    <div id="image-container" role="feed">
-      <slot attribute="images"></slot>
-    </div>
-    <button class="navigation-icons right-icon" on-tap="_showNextImage" hidden$="[[_hideRightIcon]]" aria-hidden$="[[_hideRightIcon]]"  aria-label="scroll to next image">
-      <iron-icon icon="chevron-right"></iron-icon>
-    </button>
-    <div class="dots-container" hidden$="[[hideDots]]" aria-hidden$="[[hideDots]]" tabindex="0" role="radiogroup">
-      <template is="dom-repeat" items="[[_imageArray]]" on-dom-change="_changeDotSelection">
-        <input type="radio" name="image" class="dots" id$="dot[[index]]" on-tap="_dotClicked">
+        </style>
+        <button class="navigation-icons left-icon" on-tap="_showPreviousImage" hidden$="[[_hideLeftIcon]]" aria-hidden$="[[_hideLeftIcon]" aria-label="scroll to previous image">
+          <iron-icon icon="chevron-left"></iron-icon>
+        </button>
+        <div id="image-container" role="feed">
+          <slot attribute="images"></slot>
+        </div>
+        <button class="navigation-icons right-icon" on-tap="_showNextImage" hidden$="[[_hideRightIcon]]" aria-hidden$="[[_hideRightIcon]]"  aria-label="scroll to next image">
+          <iron-icon icon="chevron-right"></iron-icon>
+        </button>
+        <div class="dots-container" hidden$="[[hideDots]]" aria-hidden$="[[hideDots]]" role="radiogroup">
+          <template is="dom-repeat" items="[[_imageArray]]" on-dom-change="_changeDotSelection">
+            <input type="radio" name="image" class="dots" id$="dot[[index]]" on-tap="_dotClicked">
+          </template>
+        </div>
       </template>
-     </div>
-  </template>
-  <script>
+      <script>
     /**
      *
      */
 
-    class ImageCarousel extends Polymer.GestureEventListeners(Polymer.Element) {
+     class ImageCarousel extends Polymer.GestureEventListeners(Polymer.Element) {
       static get is() { return 'image-carousel'; }
       static get properties() {
         return {
@@ -162,7 +162,7 @@
            * Boolean value to decide if images should change automatically.
            * Navigation buttons will always be hidden if this is true.
            */
-          autoscroll: {
+           autoscroll: {
             type: Boolean,
             value: false,
             reflectToAttribute: true,
@@ -172,7 +172,7 @@
           /**
            * Boolean to hide the dots used for depicting current selected image and number of images.
            */
-          hideDots: {
+           hideDots: {
             type: Boolean,
             value: false
           },
@@ -180,7 +180,7 @@
           /**
            * Gives index of image on display (count starts from 0).
            */
-          currentSelectedItem: {
+           currentSelectedItem: {
             type: Number,
             value: 0,
             readOnly: true
@@ -189,7 +189,7 @@
           /**
            * Boolean to hide navigation icons
            */
-          hideIcons: {
+           hideIcons: {
             type: Boolean,
             value: false
           },
@@ -198,7 +198,7 @@
            * Time after which image should change.
            * This will only work if autoscroll is set to true
            */
-          imageChangeInterval: {
+           imageChangeInterval: {
             type: Number,
             value: 1000
           },
@@ -206,7 +206,7 @@
           /**
            * Boolean to hide left navigation icon
            */
-          _hideLeftIcon: {
+           _hideLeftIcon: {
             type: Boolean,
             computed: '_calcLeftArrowsVal(autoscroll, hideIcons)'
           },
@@ -214,7 +214,7 @@
           /**
            * Boolean to hide right navigation icon
            */
-          _hideRightIcon: {
+           _hideRightIcon: {
             type: Boolean,
             computed: '_calcRightArrowsVal(autoscroll, hideIcons)'
           },
@@ -222,21 +222,21 @@
           /**
            * Gives total number of images/items in the carousel
            */
-          _numberOfImages: {
+           _numberOfImages: {
             type: Number
           },
 
           /**
            * Internal element to emulate array of images to create selector dots
            */
-          _imageArray: {
+           _imageArray: {
             type: Array
           },
 
           /**
            * Internal element to store the id of `setInterval` function
            */
-          _intervalTrigger: {
+           _intervalTrigger: {
             type: Number
           }
         };
@@ -245,7 +245,7 @@
       /**
        * Returns the container which contains the images.
        */
-      get container() {
+       get container() {
         return this.$['image-container'];
       }
 
@@ -256,14 +256,51 @@
           // adding role and tabindex to image carousel
           this.setAttribute('role', 'region');
           this.setAttribute('tabindex', '0');
+          this.getAttribute('aria-label') || this.getAttribute('aria-labelledby') ? null : this.setAttribute('aria-label', 'image-carousel');
+
+          // adding event listeners to control autscroll feature
+          if(this.autoscroll){
+            let idx=0
+            let elem;
+            for(let img of this._imageArray) {
+              img.addEventListener('focus',  this._stopAutoscroll.bind(this)),
+              img.addEventListener('blur', this._startAutoscroll.bind(this));
+              img.addEventListener('mouseover', this._stopAutoscroll.bind(this));
+              img.addEventListener('mouseout', this._startAutoscroll.bind(this));
+              this.hideDots ? null : (
+                elem = this.shadowRoot.getElementById(`dot${idx}`),
+                elem.addEventListener('focus', this._stopAutoscroll.bind(this)),
+                elem.addEventListener('blur', this._startAutoscroll.bind(this)),
+                elem.addEventListener('mouseover', this._stopAutoscroll.bind(this)),
+                elem.addEventListener('mouseout', this._startAutoscroll.bind(this)),
+                idx++
+                );
+            }
+          }
         });
+      }
+
+      /**
+       * Sets the value of autoscroll to true.
+       * This is mainly used to start autoscroll in case of hover and focus.
+       */
+      _startAutoscroll() {
+        this._setProperty('autoscroll', true);
+      }
+
+      /**
+       * Sets the value of autoscroll to false.
+       * This is mainly used to stop autoscroll in case of hover and focus.
+       */
+      _stopAutoscroll() {
+        this._setProperty('autoscroll', false);
       }
 
       /**
        * Calculates number of images presented to the carousel and populate _imageArray with those images.
        * Please call this function if you are dynamically changing images.
        */
-      computeNumberOfImages() {
+       computeNumberOfImages() {
         this._imageArray = Array.from(this.querySelectorAll('.scrolling-images'));
         this._numberOfImages = this._imageArray.length;
       }
@@ -271,7 +308,7 @@
       /**
        * Dom change event for when dots are ready so as to select the correct dot
        */
-      _changeDotSelection() {
+       _changeDotSelection() {
         this._dotClicked({model:{index: this.currentSelectedItem}});
       }
 
@@ -279,7 +316,7 @@
        * Changes the dot selection.
        * @param {MouseEvent} event
        */
-      _dotClicked(e) {
+       _dotClicked(e) {
         // handles keyboard press
         (e.which && e.which === 32 || e.which === 13) || (e.charCode && e.charCode === 32 || e.charCode === 13) ? e.preventDefault() : null;
         this.container.scrollLeft = e.model.index * this._getRect().width;
@@ -290,28 +327,39 @@
        * Sets value of attributes and properties based on new selection.
        * @param {MouseEvent} event
        */
-      _changeAttrAndProps(e) {
-        let elem = this.shadowRoot.getElementById("dot"+this.currentSelectedItem);
+       _changeAttrAndProps(e) {
+        let elem = this.shadowRoot.getElementById(`dot${this.currentSelectedItem}`);
         if(elem) {
-          elem.removeAttribute("checked");
-          this.shadowRoot.getElementById("dot"+e.model.index).setAttribute("checked", true).setAttribute("aria-label", (this._imageArray[this.currentSelectedItem].getAttribute("alt") || `image ${this.currentSelectedItem+1}`));
+          elem.checked = false;
           this._setCurrentSelectedItem(e.model.index);
+          this.shadowRoot.getElementById(`dot${e.model.index}`).checked = true;
+          this._makeCurrentImageFocusable();
           this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll, this.hideIcons));
           this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll, this.hideIcons));
+        }
+      }
+
+      _makeCurrentImageFocusable() {
+        let idx = 0;
+        for(let img of this._imageArray) {
+          idx===this.currentSelectedItem
+          ? (img.setAttribute("tabindex", 0), this.autoscroll ? null : img.focus())
+          : img.setAttribute("tabindex", -1);
+          idx++;
         }
       }
 
       /**
        * Observer on autoscroll to turn on and off the feature.
        */
-      _autoScrollComputation() {
+       _autoScrollComputation() {
         this.autoscroll ? (this._autoScroll(), this._setProperty('hideIcons', true) ) : clearInterval(this._intervalTrigger);
       }
 
       /**
        * Turns autoscroll on
        */
-      _autoScroll() {
+       _autoScroll() {
         let rect;
         this._intervalTrigger = setInterval(function() {
           rect = this._getRect();
@@ -328,7 +376,7 @@
        * Returns details regarding the container
        * @return {Object}
        */
-      _getRect() {
+       _getRect() {
         return this.container.getBoundingClientRect();
       }
 
@@ -337,7 +385,7 @@
        * @param {Boolean} autscroll, {Boolean} hideIcons
        * @return {Boolean}
        */
-      _calcRightArrowsVal(autoscroll, hideIcons) {
+       _calcRightArrowsVal(autoscroll, hideIcons) {
         return autoscroll || hideIcons || (this._getRect().width ? this.container.scrollLeft >= (this._numberOfImages-1) * this._getRect().width : false);
       }
 
@@ -346,14 +394,14 @@
        * @param {Boolean} autscroll, {Boolean} hideIcons
        * @return {Boolean}
        */
-      _calcLeftArrowsVal(autoscroll, hideIcons) {
+       _calcLeftArrowsVal(autoscroll, hideIcons) {
         return autoscroll || hideIcons || this.container.scrollLeft === 0;
       }
 
       /**
        * Changes selected image to previous image in the carousel
        */
-      _showPreviousImage() {
+       _showPreviousImage() {
         this.container.scrollLeft -= this._getRect().width;
         this._changeAttrAndProps({model:{index:this.currentSelectedItem-1}});
       }
@@ -361,7 +409,7 @@
       /**
        * Changes selected image to next image in the carousel
        */
-      _showNextImage() {
+       _showNextImage() {
         this.container.scrollLeft += this._getRect().width;
         this._changeAttrAndProps({model:{index:this.currentSelectedItem+1}});
       }
