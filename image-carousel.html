@@ -311,7 +311,7 @@
        _changeDotSelection() {
         this._dotClicked({model:{index: this.currentSelectedItem}});
 
-        let event  = new CustomEvent("image-carousel-ready" ,{});
+        let event  = new CustomEvent("image-carousel-changed" ,{});
         this.dispatchEvent(event);
       }
 

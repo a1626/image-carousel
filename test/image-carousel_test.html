@@ -159,7 +159,7 @@
         let element = elementArray[1];
         addLightDom(element);
         element.computeNumberOfImages();
-        element.addEventListener('image-carousel-ready', () => {
+        element.addEventListener('image-carousel-changed', () => {
           element._dotClicked({model:{index: 3}});
           let selectedItem = element.shadowRoot.querySelector('#dot3');
           assert.equal(element.currentSelectedItem, 3);
@@ -174,7 +174,7 @@
         let element = elementArray[1];
         addLightDom(element);
         element.computeNumberOfImages();
-        element.addEventListener('image-carousel-ready', () => {
+        element.addEventListener('image-carousel-changed', () => {
           element._dotClicked({model:{index: 4}});
           let selectedItem = element.shadowRoot.querySelector('#dot4');
 
@@ -190,7 +190,7 @@
         let element = elementArray[1];
         addLightDom(element);
         element.computeNumberOfImages();
-        element.addEventListener('image-carousel-ready', () => {
+        element.addEventListener('image-carousel-changed', () => {
           element._showNextImage();
           let selectedItem = element.shadowRoot.querySelector('#dot1');
 
@@ -206,7 +206,7 @@
         let element = elementArray[1];
         addLightDom(element);
         element.computeNumberOfImages();
-        element.addEventListener('image-carousel-ready', () => {
+        element.addEventListener('image-carousel-changed', () => {
 
 
           // selecting last image
