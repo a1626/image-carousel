@@ -42,7 +42,7 @@
           }
         </style>
       </custom-style>
-      <image-carousel style="width: 100px" autoscroll></image-carousel>
+      <image-carousel aria-label="test label" style="width: 100px" autoscroll></image-carousel>
     </template>
   </test-fixture>
 
@@ -58,7 +58,8 @@
           }
         </style>
       </custom-style>
-      <image-carousel style="width: 100px" autoscroll hide-dots></image-carousel>
+      <image-carousel style="width: 100px" autoscroll hide-dots aria-labelledby="test"></image-carousel>
+      <div id="test">test label setter</div>
     </template>
   </test-fixture>
 
@@ -237,6 +238,27 @@
           assert.equal(element._hideLeftIcon, true);
           done();
         });
+      });
+
+      test('host default aria-label test', function(done) {
+        const elementArray = fixture('BasicTestFixture');
+        let element = elementArray[1];
+        setTimeout(function(){
+          assert.equal(element.getAttribute('aria-label'), 'image-carousel');
+          done();
+        },15);
+      });
+
+      test('host aria-label test', function() {
+        const elementArray = fixture('AutoScrollTestFixture');
+        let element = elementArray[1];
+        assert.equal(element.getAttribute('aria-label'), 'test label');
+      });
+
+      test('host aria-labelledby test', function() {
+        const elementArray = fixture('AutoScrollWithNoDotsTestFixture');
+        let element = elementArray[1];
+        assert.equal(element.getAttribute('aria-labelledby'), 'test');
       });
     });
 

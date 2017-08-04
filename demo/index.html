@@ -35,17 +35,17 @@
       <h3>Basic image-carousel demo</h3>
       <demo-snippet>
         <template>
-          <image-carousel>
+          <image-carousel aria-label="Basic image-carousel demo">
             <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
-              <img class="scrolling-images" src="[[item]]" width="100px" height="350px">
+              <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]"  width="100px" height="350px">
             </template>
           </image-carousel>
         </template>
         <dom-bind>
           <template>
-            <image-carousel>
+            <image-carousel aria-label="Basic image-carousel demo">
               <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
-                <img class="scrolling-images" src="[[item]]" alt$="test alt [[index]]" width="100px" height="350px">
+                <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]" width="100px" height="350px">
               </template>
             </image-carousel>
           </template>
@@ -57,20 +57,20 @@
 
 
     <div class="vertical-section-container centered">
-      <h3>image-carousel demo with autoplay feature</h3>
+      <h3 id="autoplay">image-carousel demo with autoplay feature</h3>
       <demo-snippet>
         <template>
-          <image-carousel autoscroll>
+          <image-carousel autoscroll aira-labelledby="autoplay">
             <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
-              <img class="scrolling-images" src="[[item]]" width="100px" height="350px">
+              <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]"  width="100px" height="350px">
             </template>
           </image-carousel>
         </template>
         <dom-bind>
           <template>
-            <image-carousel autoscroll>
+            <image-carousel autoscroll aira-labelledby="autoplay">
               <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
-                <img class="scrolling-images" src="[[item]]" width="100px" height="350px">
+                <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]"  width="100px" height="350px">
               </template>
             </image-carousel>
           </template>
@@ -82,20 +82,20 @@
 
 
     <div class="vertical-section-container centered">
-      <h3>image-carousel demo with no dots</h3>
+      <h3 id="no-dots">image-carousel demo with no dots</h3>
       <demo-snippet>
         <template>
-          <image-carousel hide-dots>
+          <image-carousel hide-dots aria-labelledby="no-dots">
             <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
-              <img class="scrolling-images" src="[[item]]" width="100px" height="350px">
+              <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]"  width="100px" height="350px">
             </template>
           </image-carousel>
         </template>
         <dom-bind>
           <template>
-            <image-carousel hide-dots>
+            <image-carousel hide-dots aria-labelledby="no-dots">
               <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
-                <img class="scrolling-images" src="[[item]]" width="100px" height="350px">
+                <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]"  width="100px" height="350px">
               </template>
             </image-carousel>
           </template>
@@ -107,20 +107,20 @@
 
 
     <div class="vertical-section-container centered">
-      <h3>image-carousel demo with no navigation icons</h3>
+      <h3 id="no-icons">image-carousel demo with no navigation icons</h3>
       <demo-snippet>
         <template>
-          <image-carousel hide-icons>
+          <image-carousel hide-icons aria-labelledby="no-icons">
             <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
-              <img class="scrolling-images" src="[[item]]" width="100px" height="350px">
+              <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]"  width="100px" height="350px">
             </template>
           </image-carousel>
         </template>
         <dom-bind>
           <template>
-            <image-carousel hide-icons>
+            <image-carousel hide-icons aria-labelledby="no-icons">
               <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
-                <img class="scrolling-images" src="[[item]]" width="100px" height="350px">
+                <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]"  width="100px" height="350px">
               </template>
             </image-carousel>
           </template>

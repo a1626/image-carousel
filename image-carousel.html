@@ -9,13 +9,29 @@
   `image-carousel` as the name suggests is a carousel element.
 
   #### Example
-    <image-carousel>
+    <image-carousel aria-label="Example carousel">
       <template slot="images" is="dom-repeat" items='["https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg", "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg", "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
-        <img class="scrolling-images" src="[[item]]" width="100px" height="350px">
+        <img class="scrolling-images" src="[[item]]" alt$="demo at [[index]]" width="100px" height="350px">
       </template>
     </image-carousel>
 
-  __NOTE__: Please add class `scrolling-images` to all the images that are going to be used inside the carousel.
+  #### Usage
+
+Please keep following points in mind while using the element
+
+- As images will be part of `light-dom` please add property/attribute `slot="image"` to the container of the images (template in above example).
+- Images should have class named `scrolling-images` (Defining the class in not necessary, just add the attribute to image element).
+- In case, you want to change images dynamically do call `computeNumberOfImages` function afterwards.  Carousel will fire `image-carousel-changed` event once all the changes are done. You can listen for it to do/read any further changes.
+
+
+```javascript
+// assuming id of image-carousel element on which change needs to be done is image-carousel
+this.$['image-carousel'].addEventListener('image-carousel-changed', () => {
+  //further action goes here
+});
+```
+
+- As efforts have been made to keep this element accessible please add `alt` attribute to image tag and [aria-label](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-label_attribute) or [aria-labelledby](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-labelledby_attribute) to image-carousel.
 
   #### Styling
 
@@ -248,6 +264,12 @@
        get container() {
         return this.$['image-container'];
       }
+
+    /**
+     * The `image-carousel-changed` event is fired after the rendering of images tag is completed.
+     *
+     * @event image-carousel-changed
+     */
 
       connectedCallback() {
         super.connectedCallback();
