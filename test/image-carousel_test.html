@@ -108,7 +108,11 @@
           }
         </style>
       </custom-style>
-      <image-carousel-demo-app></image-carousel-demo-app>
+      <image-carousel-demo-app images='[
+        "https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg",
+        "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg",
+        "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
+      </image-carousel-demo-app>
     </template>
   </test-fixture>
 
@@ -172,7 +176,7 @@
         assert.equal(element._hideLeftIcon, true);
       });
 
-      test('WithinPolymerElementTestFixture', function() {
+      test('WithinPolymerElementTestFixture', function(done) {
         const elementArray = fixture('WithinPolymerElementTestFixture');
         let element = elementArray[1].$['my-carousel'];
         assert.equal(element.localName, 'image-carousel');
@@ -181,6 +185,14 @@
         assert.equal(element.hideIcons, false);
         assert.equal(element._hideRightIcon, false);
         assert.equal(element._hideLeftIcon, true);
+        /**
+         * Must wait for the dom-repeat to finish, or element._numberOfImages
+         * will be zero.
+         */
+        Polymer.RenderStatus.afterNextRender(element, () => {
+            assert.equal(element._numberOfImages, 3);
+            done();
+        });
       });
 
       test('Selecting element via dot selection', function(done) {
