@@ -276,9 +276,7 @@ this.$['image-carousel'].addEventListener('image-carousel-changed', () => {
       connectedCallback() {
         super.connectedCallback();
         // recompute number of images when slot contents changes
-        this.shadowRoot.querySelector('slot[attribute="images"]').addEventListener('slotchange', e => {
-            this.computeNumberOfImages();
-        });
+        this.shadowRoot.querySelector('slot[attribute="images"]').addEventListener('slotchange', this.computeNumberOfImages.bind(this));
         this.computeNumberOfImages();
         Polymer.RenderStatus.afterNextRender(this, () => {
           // adding role and tabindex to image carousel
@@ -306,6 +304,14 @@ this.$['image-carousel'].addEventListener('image-carousel-changed', () => {
             }
           }
         });
+      }
+
+      /**
+       * The listener on 'slotchange' must be removed to prevent a memory leak.
+       */
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        this.shadowRoot.querySelector('slot[attribute="images"]').removeEventListener('slotchange', this.computeNumberOfImages.bind(this));
       }
 
       /**
