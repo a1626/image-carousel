@@ -11,8 +11,9 @@ It's a carousel element for Polymer 2.0.
 
 ## Installation
 
+```
   bower i --save image-carousel
-
+```
 
 ## Example
 
