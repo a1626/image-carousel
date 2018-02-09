@@ -14,6 +14,7 @@
     <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
     <link rel="import" href="../../polymer/lib/elements/custom-style.html">
     <link rel="import" href="../image-carousel.html">
+    <link rel="import" href="./image-carousel-demo-app.html">
 
     <link rel="import" href="../../polymer/polymer-element.html">
     <link rel="import" href="../../iron-icons/iron-icons.html">
@@ -25,6 +26,9 @@
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
         image-carousel:nth-child(odd) {
+          display: none;
+        }
+        image-carousel-demo-app:nth-child(odd) {
           display: none;
         }
       </style>
@@ -123,6 +127,31 @@
                 <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]"  width="100px" height="350px">
               </template>
             </image-carousel>
+          </template>
+        </dom-bind>
+        <div></div>
+      </demo-snippet>
+    </div>
+
+
+
+    <div class="vertical-section-container centered">
+      <h3>Basic image-carousel, used inside another polymer element</h3>
+      <demo-snippet>
+        <template>
+          <image-carousel-demo-app aria-labelledby="image-carousel inside another polymer element" images='[
+            "https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg",
+            "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg",
+            "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
+          </image-carousel-demo-app>
+        </template>
+        <dom-bind>
+          <template>
+            <image-carousel-demo-app aria-labelledby="image-carousel inside another polymer element" images='[
+              "https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg",
+              "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg",
+              "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
+            </image-carousel-demo-app>            
           </template>
         </dom-bind>
         <div></div>
