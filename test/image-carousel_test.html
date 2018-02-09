@@ -195,6 +195,24 @@
         });
       });
 
+      test('notification of selection change', function(done) {
+        const elementArray = fixture('WithinPolymerElementTestFixture');
+        let element = elementArray[1].$['my-carousel'];
+        /**
+         * Must wait for the dom-repeat to finish, or element._numberOfImages
+         * will be zero.
+         */
+        Polymer.RenderStatus.afterNextRender(element, () => {
+          assert.equal(element._numberOfImages, 3);
+          element.addEventListener('selection-changed', (e) => {
+            assert.equal(e.detail.id, 'my-carousel');
+            assert.equal(e.detail.index, 2);
+            done();
+          });
+          element._dotClicked({model:{index: 2}});
+        });
+      });
+
       test('Selecting element via dot selection', function(done) {
         const elementArray = fixture('BasicTestFixture');
         let element = elementArray[1];

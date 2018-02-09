@@ -6,7 +6,7 @@
     <style>
     </style>
     <div>
-      <image-carousel id="my-carousel" aria-label="actual image-carousel">
+      <image-carousel id="my-carousel" notify-selection-changed="true" aria-label="actual image-carousel">
         <template slot="images" is="dom-repeat" items='[[images]]'>
           <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]" width="100px" height="350px">
         </template>

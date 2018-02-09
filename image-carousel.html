@@ -226,6 +226,16 @@ this.$['image-carousel'].addEventListener('image-carousel-changed', () => {
           },
 
           /**
+           * If true, a `selection-changed` event will be fired when the selection
+           * changes, whether via autoscroll, or user initiation by pressing a
+           * dot or left/right buttons
+           */
+           notifySelectionChanged: {
+            type: Boolean,
+            value: false
+          },
+
+          /**
            * Boolean to hide left navigation icon
            */
            _hideLeftIcon: {
@@ -377,6 +387,13 @@ this.$['image-carousel'].addEventListener('image-carousel-changed', () => {
           this._makeCurrentImageFocusable();
           this._setProperty('_hideRightIcon', this._calcRightArrowsVal(this.autoscroll, this.hideIcons));
           this._setProperty('_hideLeftIcon', this._calcLeftArrowsVal(this.autoscroll, this.hideIcons));
+          if (this.notifySelectionChanged) {
+            let event  = new CustomEvent("selection-changed" , {
+              composed: true, // allows to pass through shadow dom to parent
+              detail: {id: this.id, index: e.model.index}
+            });
+            this.dispatchEvent(event);
+          }
         }
       }
 
