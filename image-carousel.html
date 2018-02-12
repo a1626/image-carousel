@@ -226,9 +226,9 @@ this.$['image-carousel'].addEventListener('image-carousel-changed', () => {
           },
 
           /**
-           * If true, a `selection-changed` event will be fired when the selection
-           * changes, whether via autoscroll, or user initiation by pressing a
-           * dot or left/right buttons
+           * If true, a `selection-changed` event will be fired when the 
+           * displayed image changes, whether via autoscroll, or user 
+           * initiation by pressing a dot or left/right buttons
            */
            notifySelectionChanged: {
             type: Boolean,
@@ -376,7 +376,10 @@ this.$['image-carousel'].addEventListener('image-carousel-changed', () => {
 
       /**
        * Sets value of attributes and properties based on new selection.
+       * If `notify-selection-changed` is true, A `selection-changed` event
+       * is fired.
        * @param {MouseEvent} event
+       * @event selection-changed
        */
        _changeAttrAndProps(e) {
         let elem = this.shadowRoot.getElementById(`dot${this.currentSelectedItem}`);
