@@ -1,12 +1,25 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../image-carousel.html">
+
+<!--
+  `image-carousel-demo-app` is an element which demonstrates the use of the `image-carousel` within 
+  another polymer element.
+
+  #### Example
+    <image-carousel-demo-app aria-labelledby="image-carousel inside another polymer element" images='[
+      "https://c2.staticflickr.com/2/1217/4607963354_e1a8fea210_z.jpg",
+      "https://cs1.livemaster.ru/storage/e6/45/00b119c13ed9f8b4dc6363a60d--materialy-dlya-tvorchestva-nabor-dlya-vyshivki-biserom-belyj-ti.jpg",
+      "https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"]'>
+    </image-carousel-demo-app>
+
+    -->
 <dom-module id="image-carousel-demo-app">
   <template>
     <style>
     </style>
     <div>
-      <image-carousel id="my-carousel" aria-label="actual image-carousel">
+      <image-carousel id="my-carousel" notify-selection-changed aria-label="actual image-carousel">
         <template slot="images" is="dom-repeat" items='[[images]]'>
           <img class="scrolling-images" src="[[item]]" alt$="demo alt [[index]]" width="100px" height="350px">
         </template>
